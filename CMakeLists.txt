@@ -1,18 +1,18 @@
-cmake_minimum_required(VERSION 3.10)
-project(FallingSand)
+cmake_minimum_required(VERSION 3.10) # Version of cmake.
+project(FallingSand) # Name of project
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Create the compile_commands.json file
+set(CMAKE_CXX_STANDARD 17) # CPP STANDARD
 
-include(FetchContent)
+include(FetchContent) # Module that lets me download libraries.
 FetchContent_Declare(
-  raylib
-  GIT_REPOSITORY https://github.com/raysan5/raylib.git
-  GIT_TAG 5.5
+  raylib # Name of library.
+  GIT_REPOSITORY https://github.com/raysan5/raylib.git # Git repo.
+  GIT_TAG 5.5 # The version of the library.
 )
 
-# Let raylib build as a static library
-set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(raylib)
+set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # Turn off build examples.
+FetchContent_MakeAvailable(raylib) # Actually download the library.
 
-add_executable(FallingSand main.cpp)
-target_link_libraries(FallingSand raylib)
+add_executable(FallingSand main.cpp) # Compile the cpp.
+target_link_libraries(FallingSand raylib) # Link the library to the executable.
