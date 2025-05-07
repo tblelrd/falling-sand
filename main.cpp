@@ -104,6 +104,7 @@ void do_sand_update (int x, int y) {
   if (y + 1 >= GRID_HEIGHT) return; // Don't bother if out of bounds.
 
   Particle &sand = *get_particle_at(x, y);
+  sand.has_updated = true;
 
   if (!can_block_sand(grid[get_index_at(x, y + 1)])) { // is thing below
     swap_cells(get_index_at(x, y+1), get_index_at(x, y));
@@ -112,14 +113,13 @@ void do_sand_update (int x, int y) {
   } else if (!can_block_sand(grid[get_index_at(x + 1, y + 1)])) {
     swap_cells(get_index_at(x + 1, y + 1), get_index_at(x, y));
   }
-
-  sand.has_updated = true;
 }
 
 void do_water_update (int x, int y) {
   if (y + 1 >= GRID_HEIGHT) return; // Don't bother if out of bounds.
 
   Particle &water = *get_particle_at(x, y);
+  water.has_updated = true;
 
   if (!can_block_water(grid[get_index_at(x, y + 1)])) { // is thing below
     swap_cells(get_index_at(x, y+1), get_index_at(x, y));
@@ -143,15 +143,13 @@ void do_water_update (int x, int y) {
     if (
       can_block_water(grid[get_index_at(x + 1, y)])
       && can_block_water(grid[get_index_at(x - 1, y)])
-    ) {}
+    ) return;
     else {
       int direction = GetRandomValue(0, 1) == 1 ? 1 : -1;
       water.vx = direction;
       swap_cells(get_index_at(x + direction, y), get_index_at(x, y));
     }
   }
-
-  water.has_updated = true;
 }
 
 int current_cell_type = 1;
@@ -183,30 +181,24 @@ int main() {
 
     // --- Update ---
     for (int y = GRID_HEIGHT - 1; y >= 0; y--) {
-    // for (int y = 0; y < GRID_HEIGHT; y++) {
-      // for (int x = 0; x < GRID_WIDTH; x++) {
-      for (int x = GRID_WIDTH - 1; x >= 0; x--) {
-        Particle cell = *grid[get_index_at(x, y)];
+      for (int x = 0; x < GRID_WIDTH; x++) {
+      // for (int x = GRID_WIDTH - 1; x >= 0; x--) {
+        int scanx = y % 2 == 0 ? GRID_WIDTH - (1 + x) : x;
+        Particle cell = *grid[get_index_at(scanx, y)];
         if (cell.has_updated) continue;
 
         switch (cell.id) {
           case id_sand: // SAND
-            do_sand_update(x, y);
+            do_sand_update(scanx, y);
             break;
 
           case id_water: // WATER
-            do_water_update(x, y);
+            do_water_update(scanx, y);
             break;
 
           case id_empty: // AIR
           default: break;
         }
-      }
-    }
-
-    for (int y = 0; y < GRID_HEIGHT; y++) {
-      for (int x = 0; x < GRID_WIDTH; x++) {
-        get_particle_at(x, y)->has_updated = false;
       }
     }
 
@@ -222,6 +214,13 @@ int main() {
       }
     }
     EndDrawing();
+
+    // Reset the update status of each particle.
+    for (int y = 0; y < GRID_HEIGHT; y++) {
+      for (int x = 0; x < GRID_WIDTH; x++) {
+        get_particle_at(x, y)->has_updated = false;
+      }
+    }
   }
 
   CloseWindow();
