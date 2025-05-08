@@ -14,5 +14,7 @@ FetchContent_Declare(
 set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # Turn off build examples.
 FetchContent_MakeAvailable(raylib) # Actually download the library.
 
-add_executable(FallingSand src/main.cpp) # Compile the cpp.
+file(GLOB_RECURSE SRC_FILES ${CMAKE_SOURCE_DIR}/src/*.cpp)
+
+add_executable(FallingSand ${SRC_FILES}) # Compile the cpp.
 target_link_libraries(FallingSand raylib) # Link the library to the executable.

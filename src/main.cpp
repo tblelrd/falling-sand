@@ -1,6 +1,31 @@
-#include <iostream>
+#include "main.h"
+
 
 int main () {
-  std::cout << "Hello, world!\n";
+  int cell_size = 10;
+  int width = 50;
+  int height = 50;
+  Grid grid = Grid(width, height);
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      grid.set_particle(grid.index_from(x, y), Element::SAND);
+    }
+  }
+
+  InitWindow(cell_size * width, cell_size * height, "Falling In Sand");
+  SetTargetFPS(60);
+
+  while (!WindowShouldClose()) {
+    BeginDrawing();
+    ClearBackground(LIGHTGRAY);
+
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        Color color = grid.get_particle(x, y)->get_color();
+        DrawRectangle(x * cell_size, y * cell_size, cell_size, cell_size, color);
+      }
+    }
+    EndDrawing();
+  }
   return 0;
 }

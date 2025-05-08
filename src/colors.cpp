@@ -19,6 +19,7 @@ ColorHSL rgb_to_hsl (Color color) {
   float min = MIN(MIN(r, g), b);
 
   result.h = result.s = result.l = (max + min) / 2;
+  result.a = a;
 
   if (max == min) {
     result.h = result.s = 0; // Achromatic
@@ -28,7 +29,7 @@ ColorHSL rgb_to_hsl (Color color) {
     float diff = max - min;
     result.s = (result.l > 0.5) ?
       diff / (2 - max - min) : 
-      diff / max + min;
+      diff / (max + min);
 
     if (max == r) {
       result.h = (g - b) / diff + (g < b ? 6 : 0);
@@ -63,6 +64,7 @@ float hue_to_rgb (float p, float q, float t) {
 
 Color hsl_to_rgb (ColorHSL color) {
   Color result;
+  result.a = (color.a * 255);
 
   if (0 == color.s) {
     result.r = result.g = result.b = 255;
