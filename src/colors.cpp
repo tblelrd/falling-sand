@@ -67,7 +67,7 @@ Color hsl_to_rgb (ColorHSL color) {
   result.a = (color.a * 255);
 
   if (0 == color.s) {
-    result.r = result.g = result.b = 255;
+    result.r = result.g = result.b = color.l * 255;
   }
   else {
     float q = color.l < 0.5 ? color.l * (1 + color.s) : color.l + color.s - color.l * color.s;

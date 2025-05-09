@@ -9,21 +9,21 @@ using std::unordered_map;
 using std::pair;
 
 class Grid {
-  Particle* cells;
+  Particle** cells;
 
   unordered_map<Element, Color> color_map = {
     {Element::EMPTY, BLANK},
     {Element::WALL, BLANK},
-    {Element::SAND, ORANGE},
+    {Element::SAND, GOLD},
     {Element::WATER, SKYBLUE},
-    {Element::STONE, GRAY},
+    {Element::STONE, DARKGRAY},
   };
 
   Particle wall = Particle(Element::WALL); // Particle representing the wall.
   int width;
   int height;
 
-  bool out_of_bounds(int index) { return index < 0 || index >= width; }
+  bool out_of_bounds(int index) { return index < 0 || index >= width * height; }
   bool out_of_bounds(int x, int y) {
     if (x < 0 || x >= width) return true;
     if (y < 0 || y >= height) return true;

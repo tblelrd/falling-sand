@@ -11,7 +11,11 @@ Grid::Grid(int width_, int height_) {
 
 void Grid::reset_grid() {
   delete cells; // Free the memory.
-  cells = new Particle[width * height];
+  // cells = new Particle[width * height];
+  cells = new Particle*[width * height];
+  for (int i = 0; i < width * height; i++) {
+    cells[i] = new Particle();
+  }
 }
 
 pair<int, int> Grid::position_from(int index) {
@@ -31,7 +35,7 @@ int Grid::index_from(int x, int y) {
 
 Particle* Grid::get_particle(int index) {
   if (out_of_bounds(index)) return &wall;
-  return &cells[index];
+  return cells[index];
 }
 
 Particle* Grid::get_particle(int x, int y){
@@ -42,7 +46,8 @@ Particle* Grid::get_particle(int x, int y){
 bool Grid::set_particle(int index, Particle particle) {
   if (out_of_bounds(index)) return false;
 
-  cells[index] = particle;
+  delete cells[index]; // Delete if exists
+  cells[index] = new Particle(particle); // Allocate on the heap so it doesn't disappear.
   return true;
 }
 
@@ -61,7 +66,10 @@ Color color_from_element(Element type, unordered_map<Element, Color> color_map) 
   
   ColorHSL hsl = rgb_to_hsl(color);
   // printf("%f, %f, %f\n", hsl.h, hsl.s, hsl.l);
-  hsl.l += GetRandomValue(-2, 2) * 0.1;
+  int variance = get_element_variance(type);
+  hsl.l += GetRandomValue(-variance, variance) * 0.01;
+  if (hsl.l < 0) hsl.l = 0;
+  else if (hsl.l > 1) hsl.l = 1;
 
   color = hsl_to_rgb(hsl);
 
@@ -81,11 +89,11 @@ bool Grid::set_particle(int x, int y, Element type) {
   );
 }
 
-bool Grid::swap_cells(int index_from, int index_to) {
-  if (out_of_bounds(index_from) || out_of_bounds(index_to)) return false;
+bool Grid::swap_cells(int f_index, int t_index) {
+  if (out_of_bounds(f_index) || out_of_bounds(t_index)) return false;
 
-  Particle *temp_cell = get_particle(index_from);
-  cells[index_from] = cells[index_to];
-  cells[index_to] = *temp_cell;
+  Particle* temp_cell = get_particle(f_index);
+  cells[f_index] = cells[t_index];
+  cells[t_index] = temp_cell;
   return true;
 }

@@ -15,6 +15,7 @@ public:
   Engine(Grid grid_) : grid(grid_) {}
 
   void step();
+  void post_step();
 };
 
 #endif
