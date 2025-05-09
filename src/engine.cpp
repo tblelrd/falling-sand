@@ -18,7 +18,8 @@ void do_update (Grid& grid, Particle& particle, int index) {
       break;
 
     case Element::EMPTY:
-    default: break;
+    default: 
+      break;
   }
 
   particle.has_updated = true;
@@ -35,7 +36,6 @@ void Engine::step() {
         : width - (x + 1);
 
       Particle &particle = *grid.get_particle(scanx, y);
-      if (particle.has_updated) continue;
       do_update(grid, particle, grid.index_from(scanx, y));
     }
   }

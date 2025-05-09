@@ -52,9 +52,9 @@ void do_dispersion(Grid& grid, int index, int offset) {
 }
 
 /**
-* Return true if gravity was blocked.
+* Returns a status code.
 */
-bool do_movement(Grid& grid, int index) {
+int do_movement(Grid& grid, int index) {
   auto [x, y] = grid.position_from(index);
   bool left_first = GetRandomValue(0, 1); // Randomly pick side
   int offset = left_first ? -1 : 1;
@@ -63,15 +63,17 @@ bool do_movement(Grid& grid, int index) {
 
   if (!can_block_water(type(x, y + 1))) {
     swap(x, y + 1);
-    return true;
+    return 0;
   } else if (!can_block_water(type(x + offset, y + 1))) {
     swap(x + offset, y + 1);
+    return 1;
   } else if (!can_block_water(type(x - offset, y + 1))) {
     swap(x - offset, y + 1);
+    return 1;
   } else {
     do_dispersion(grid, index, offset);
   }
-  return false;
+  return 2;
 }
 }
 
@@ -89,19 +91,19 @@ void Behaviors::update_water(Grid &grid, int index) {
   p_left.try_fall();
   p_right.try_fall();
 
-  bool success = true;
+  int status = 0;
   for (int i = 0; i < velocity[1]; i++) {
     auto [px, py] = grid.position_from(index);
     int new_index = grid.index_from(px, py + i);
 
-    success = do_movement(grid, new_index);
-    if (!success) break;
+    status = do_movement(grid, new_index);
+    if (status > 0) break;
   }
 
   // If it didnt hit a sand block, then increase velocity, else make it 1.
-  if (success) {
+  if (status <= 1) {
     if (velocity[1] < Behaviors::MAX_GRAVITY) velocity[1]++;
   } else {
-    if (velocity[1] > 1) velocity[1]--;
+    velocity[1] = 1;
   }
 }

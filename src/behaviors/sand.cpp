@@ -13,9 +13,9 @@ bool can_block_sand(Element type) {
 }
 
 /**
-* Return true if gravity was blocked.
+* returns a status code
 */
-bool do_movement(Grid& grid, int index) {
+int do_movement(Grid& grid, int index) {
   auto [x, y] = grid.position_from(index);
   bool left_first = GetRandomValue(0, 1); // Randomly check left first?
   int offset = left_first ? -1 : 1;
@@ -24,17 +24,17 @@ bool do_movement(Grid& grid, int index) {
 
   if (!can_block_sand(type(x, y + 1))) {
     swap(x, y + 1);
-    return true;
+    return 0;
   } else if (!can_block_sand(type(x + offset, y + 1))) {
     swap(x + offset, y + 1);
-    return false;
+    return 1;
   } else if (!can_block_sand(type(x - offset, y + 1))) {
     swap(x - offset, y + 1);
-    return false;
+    return 1;
   }
 
   p(x, y)->is_falling = false;
-  return false;
+  return 2;
 }
 }
 
@@ -60,17 +60,17 @@ void Behaviors::update_sand(Grid &grid, int index) {
   p_left.try_fall();
   p_right.try_fall();
 
-  bool success = true;
+  int status = 0;
   for (int i = 0; i < velocity[1]; i++) {
     auto [px, py] = grid.position_from(index);
     int new_index = grid.index_from(px, py + i);
 
-    success = do_movement(grid, new_index);
-    if (!success) break;
+    status = do_movement(grid, new_index);
+    if (status > 0) break;
   }
 
   // If it didnt hit a sand block, then increasae velocity, else make it 0.
-  if (success) {
+  if (status <= 1) {
     if (velocity[1] < Behaviors::MAX_GRAVITY) velocity[1]++;
   } else {
     velocity[1] = 1;

@@ -8,6 +8,7 @@
 using std::unordered_map;
 using std::pair;
 
+Color make_transparent(Color color);
 class Grid {
   Particle** cells;
 
@@ -15,7 +16,7 @@ class Grid {
     {Element::EMPTY, BLANK},
     {Element::WALL, BLANK},
     {Element::SAND, GOLD},
-    {Element::WATER, SKYBLUE},
+    {Element::WATER, {0, 82, 172, 150}},
     {Element::STONE, DARKGRAY},
   };
 

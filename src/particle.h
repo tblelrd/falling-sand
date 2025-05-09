@@ -51,7 +51,7 @@ public:
   */
   void try_fall();
 
-  bool has_updated;
+  bool has_updated = false;
   bool is_falling = true;
 };
 #endif
