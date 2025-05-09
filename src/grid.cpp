@@ -1,6 +1,5 @@
 #include "grid.h"
 #include "colors.h"
-#include <cstdio>
 
 Grid::Grid(int width_, int height_) {
   width = width_;
@@ -16,7 +15,7 @@ void Grid::reset_grid() {
 }
 
 pair<int, int> Grid::position_from(int index) {
-  if (index >= width * height || index < 0) return { -1, -1 };
+  if (out_of_bounds(index)) return { -1, -1 };
 
   return {
     index % width,
@@ -25,25 +24,35 @@ pair<int, int> Grid::position_from(int index) {
 }
 
 int Grid::index_from(int x, int y) {
-  if (x >= width || x < 0) return -1;
-  if (y >= height || y < 0) return -1;
+  if (out_of_bounds(x, y)) return -1;
 
   return (y * width) + x;
 }
 
 Particle* Grid::get_particle(int index) {
+  if (out_of_bounds(index)) return &wall;
   return &cells[index];
 }
 
 Particle* Grid::get_particle(int x, int y){
+  if (out_of_bounds(x, y)) return &wall;
   return Grid::get_particle(index_from(x, y));
 }
 
 bool Grid::set_particle(int index, Particle particle) {
-  if (index < 0 || index >= width * height) return false;
+  if (out_of_bounds(index)) return false;
 
   cells[index] = particle;
   return true;
+}
+
+bool Grid::set_particle(int x, int y, Particle particle) {
+  if (out_of_bounds(x, y)) return false;
+
+  return Grid::set_particle(
+    Grid::index_from(x, y),
+    particle
+  );
 }
 
 Color color_from_element(Element type, unordered_map<Element, Color> color_map) {
@@ -65,8 +74,18 @@ bool Grid::set_particle(int index, Element type) {
   return Grid::set_particle(index, particle);
 }
 
-void Grid::swap_cells(int index_from, int index_to) {
+bool Grid::set_particle(int x, int y, Element type) {
+  return Grid::set_particle(
+    Grid::index_from(x, y),
+    type
+  );
+}
+
+bool Grid::swap_cells(int index_from, int index_to) {
+  if (out_of_bounds(index_from) || out_of_bounds(index_to)) return false;
+
   Particle *temp_cell = get_particle(index_from);
   cells[index_from] = cells[index_to];
   cells[index_to] = *temp_cell;
+  return true;
 }

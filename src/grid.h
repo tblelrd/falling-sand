@@ -13,27 +13,56 @@ class Grid {
 
   unordered_map<Element, Color> color_map = {
     {Element::EMPTY, BLANK},
+    {Element::WALL, BLANK},
     {Element::SAND, ORANGE},
     {Element::WATER, SKYBLUE},
     {Element::STONE, GRAY},
   };
 
+  Particle wall = Particle(Element::WALL); // Particle representing the wall.
   int width;
   int height;
+
+  bool out_of_bounds(int index) { return index < 0 || index >= width; }
+  bool out_of_bounds(int x, int y) {
+    if (x < 0 || x >= width) return true;
+    if (y < 0 || y >= height) return true;
+    return false;
+  }
+
 public:
   Grid(int width_, int height_);
 
   void reset_grid();
 
+  /**
+   * Will return -1 or {-1, -1}
+   * if provided index or position is
+   * out of bounds.
+   */
   pair<int, int> position_from(int index);
   int index_from(int x, int y);
 
+  /**
+  * These methods will return a wall particle
+  * if the position/index is out of bounds.
+  */
   Particle* get_particle(int index);
   Particle* get_particle(int x, int y);
-  bool set_particle(int index, Particle particle);
-  bool set_particle(int index, Element type);
 
-  void swap_cells(int index_from, int index_to);
+  /**
+  * These methods will return true if success,
+  * false if fail.
+  */
+  bool set_particle(int index, Particle particle);
+  bool set_particle(int x, int y, Particle particle);
+  bool set_particle(int index, Element type);
+  bool set_particle(int x, int y, Element type);
+
+  bool swap_cells(int index_from, int index_to);
+
+  int get_width() { return width; }
+  int get_height() { return height; }
 };
 
 #endif

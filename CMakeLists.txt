@@ -17,4 +17,5 @@ FetchContent_MakeAvailable(raylib) # Actually download the library.
 file(GLOB_RECURSE SRC_FILES ${CMAKE_SOURCE_DIR}/src/*.cpp)
 
 add_executable(FallingSand ${SRC_FILES}) # Compile the cpp.
+# add_executable(FallingSand main.cpp) # Compile the cpp.
 target_link_libraries(FallingSand raylib) # Link the library to the executable.

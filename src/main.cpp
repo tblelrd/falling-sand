@@ -1,5 +1,6 @@
 #include "main.h"
-
+#include "raylib.h"
+#include "grid.h"
 
 int main () {
   int cell_size = 10;
@@ -8,7 +9,7 @@ int main () {
   Grid grid = Grid(width, height);
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
-      grid.set_particle(grid.index_from(x, y), Element::SAND);
+      grid.set_particle(x, y, Element::SAND);
     }
   }
 
