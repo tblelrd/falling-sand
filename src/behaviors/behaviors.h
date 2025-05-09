@@ -13,6 +13,9 @@ namespace Behaviors {
   void update_sand(Grid& grid, int index);
   void update_water(Grid& grid, int index);
   void update_stone(Grid& grid, int index);
+  void update_wood(Grid& grid, int index);
+  void update_fire(Grid& grid, int index);
+  void update_ember(Grid& grid, int index);
 }
 
 #endif

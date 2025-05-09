@@ -17,6 +17,18 @@ void do_update (Grid& grid, Particle& particle, int index) {
       Behaviors::update_stone(grid, index);
       break;
 
+    case Element::FIRE:
+      Behaviors::update_fire(grid, index);
+      break;
+      
+    case Element::WOOD:
+      Behaviors::update_wood(grid, index);
+      break;
+
+    case Element::EMBER:
+      Behaviors::update_ember(grid, index);
+      break;
+
     case Element::EMPTY:
     default: 
       break;
@@ -36,7 +48,7 @@ void Engine::step() {
         : width - (x + 1);
 
       Particle &particle = *grid.get_particle(scanx, y);
-      do_update(grid, particle, grid.index_from(scanx, y));
+      if (!particle.has_updated) do_update(grid, particle, grid.index_from(scanx, y));
     }
   }
 }

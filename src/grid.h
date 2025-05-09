@@ -18,6 +18,9 @@ class Grid {
     {Element::SAND, GOLD},
     {Element::WATER, {0, 82, 172, 150}},
     {Element::STONE, DARKGRAY},
+    {Element::WOOD, BROWN},
+    {Element::EMBER, {232, 198, 88, 255}},
+    {Element::FIRE, {232, 158, 88, 255}}
   };
 
   Particle wall = Particle(Element::WALL); // Particle representing the wall.

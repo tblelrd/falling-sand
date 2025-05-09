@@ -7,10 +7,12 @@
 #include <cstdio>
 #include <cstdlib>
 
-std::array<Element, 3> elements = {
+std::array<Element, 5> elements = {
   Element::SAND,
   Element::WATER,
   Element::STONE,
+  Element::WOOD,
+  Element::FIRE,
 };
 
 void draw_square(int x, int y, int size, Grid& grid, Element type) {

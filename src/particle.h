@@ -16,6 +16,9 @@ enum class Element : uint8_t {
   SAND,
   WATER,
   STONE,
+  WOOD,
+  EMBER,
+  FIRE,
 };
 
 // How resistant it is to change.
@@ -38,7 +41,7 @@ public:
   Element get_type() { return type; }
   void set_type(Element type_) { type = type_; }
 
-  Color get_color() { return color; }
+  Color get_color();
   void set_color(Color color_) { color = color_; }
 
   array<int, 2>& get_velocity() { return velocity; }
