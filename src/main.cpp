@@ -25,7 +25,8 @@ void draw_square(int x, int y, int size, Grid& grid, Element type) {
   }
 }
 
-
+// https://gist.github.com/DavidMcLaughlin208/60e69e698e3858617c322d80a8f174e2
+// Adapted to use bresenham's algorithm
 void draw_line(
   array<int, 2> pos1,
   array<int, 2> pos2,
