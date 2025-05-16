@@ -33,7 +33,7 @@ void Behaviors::update_fire(Grid &grid, int index) {
     return;
   }
 
-  if (!can_block_fire(type(x, y - 1))) {
+  if (!can_block_fire(type(x, y - 1)) && GetRandomValue(0, 10) < 5) {
     swap(x, y - 1);
   } else if (!can_block_fire(type(x + offset, y - 1))) {
     swap(x + offset, y - 1);

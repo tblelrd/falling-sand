@@ -1,5 +1,7 @@
 # Yet another falling sand simulation!!
 
+![demo](./demo.gif)
+
 ## Stuff it can do
 
 Sand falls
